@@ -9,8 +9,15 @@ import time
 from bottle import route, run, template, static_file
 
 PICS = []
+PICLEN = 0
 STARTTIME = 0
-INTERVAL = 30
+INTERVAL = 20; 
+
+#####################################################################
+#
+# Bottle Handlers
+#
+#####################################################################
 
 @route('/')
 def main():
@@ -20,7 +27,9 @@ def main():
 @route('/next')
 def next():
     """ figure out next gif to return """
-    return None
+    index = whatsnext()
+    return {'switchTime': str(STARTTIME + (index * INTERVAL)), 
+            'nextImg': PICS[index]}
 
 
 @route('/static/<path:path>')
@@ -32,6 +41,24 @@ def static(path):
 @route('/hello/<name>')
 def index(name):
     return template('<b>Hello {{name}}</b>!', name=name)
+    
+#####################################################################
+#
+# Bottle helpers
+#
+#####################################################################
+
+def whatsnext():
+    """ based on the time, return the next index """
+    return 1 + int((time.time() - STARTTIME) / INTERVAL) % PICLEN
+    
+
+
+#####################################################################
+#
+# Initialization Code
+#
+#####################################################################
 
 
 def load_config():
@@ -39,7 +66,7 @@ def load_config():
     initializes the player
     """
     
-    global STARTTIME, PICS
+    global STARTTIME, PICS, PICLEN
 
     config = ConfigParser.RawConfigParser()
     config.read("gdj.cfg")
@@ -49,7 +76,10 @@ def load_config():
     for module in modules:
         load_module(PICS, module)
     random.shuffle(PICS)
-    STARTTIME = (int(time.time())/30) * 30
+
+    PICLEN = len(PICS)
+
+    STARTTIME = (int(time.time())/INTERVAL) * INTERVAL
 
 
 
@@ -67,4 +97,4 @@ def load_module(pics, module):
 
 #run(host='localhost', port=8080, server="paste")
 load_config()
-run(host='localhost', port=8080)
+run(host='0.0.0.0', port=8080)

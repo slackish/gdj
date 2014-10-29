@@ -62,7 +62,7 @@ html, body {
     <div class="logo">
         <img id="logo" src='/static/logo.png'>
     </div>
-                    
+
     <script>
         var next_url;
         var next_time;
@@ -85,6 +85,9 @@ html, body {
                     console.log("offset is " + offset);
                     console.log("next_time is " + next_time);
                     console.log("cur_time is " + cur_time);
+                    // preload
+                    preloadimg = new Image();
+                    preloadimg.src = next_url;
                     setTimeout(swapGif, offset);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
@@ -98,15 +101,15 @@ html, body {
         function swapGif() {
             console.log("swapGif called");
             console.log(next_url);
-            //$("#img").fadeOut(function(){
+            $("#img").fadeOut(function(){
                 var imgstyle = document.getElementById("img").style;
                 imgstyle.background = "url(" + next_url + ") no-repeat center center fixed";
                 imgstyle["-webkit-background-size"] = "contain";
                 imgstyle["-moz-background-size"] = "contain";
                 imgstyle["-o-background-size"] = "contain";
                 imgstyle["background-size"] = "contain";
-            //$("#img").fadeIn();
-            //});
+            $("#img").fadeIn();
+            });
             setTimeout(newDirective, 1000);
         };
 

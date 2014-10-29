@@ -27,8 +27,8 @@ def main():
 @route('/next')
 def next():
     """ figure out next gif to return """
-    index = whatsnext()
-    return {'switchTime': str(STARTTIME + (index * INTERVAL)), 
+    index, nexttime = whatsnext()
+    return {'switchTime': str(nexttime), 
             'nextImg': PICS[index]}
 
 
@@ -50,7 +50,10 @@ def index(name):
 
 def whatsnext():
     """ based on the time, return the next index """
-    return 1 + int((time.time() - STARTTIME) / INTERVAL) % PICLEN
+    index = (1 + int((time.time() - STARTTIME) / INTERVAL))
+    nexttime = STARTTIME + (index * INTERVAL)
+    index = index % PICLEN
+    return (index, nexttime)
     
 
 

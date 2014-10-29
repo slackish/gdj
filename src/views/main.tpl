@@ -27,15 +27,15 @@ html, body {
 
 #logo {
     position: fixed;
-    opacity: 1;
+    opacity: .5;
     z-index: 2;
     right: 5px;
     bottom: 5px;
-    width: 15%;
-    height: 15%;
-    max-height: 15%;
-    max-width: 15%;
-    background: url("/static/logo.png") no-repeat center center fixed;
+    width: 30%;
+    height: 30%;
+    max-height: 30%;
+    max-width: 30%;
+    background: url("/static/logo.png") no-repeat center center;
     -webkit-background-size: contain;
     -moz-background-size: contain;
     -o-background-size: contain;

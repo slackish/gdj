@@ -13,6 +13,7 @@ html, body {
 }
 
 #img{
+    position: fixed;
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -23,18 +24,22 @@ html, body {
     -o-background-size: contain;
     background-size: contain;
 }
-.logo, .push {
-    height: 15%;
-    z-index: 1;
-}
 
-.logo img {
-    float: right;
-    opacity: 0.5;
-    max-height: 100%;
-    max-width: 100%;
-    height: 100%;
-    width: auto;
+#logo {
+    position: fixed;
+    opacity: 1;
+    z-index: 2;
+    right: 5px;
+    bottom: 5px;
+    width: 15%;
+    height: 15%;
+    max-height: 15%;
+    max-width: 15%;
+    background: url("/static/logo.png") no-repeat center center fixed;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
 }
 
 
@@ -54,14 +59,9 @@ html, body {
 
 
 <body>
+    <div id="logo"></div>
     <div id="img"></div>
-    <div class="wrapper">
-        <div class="push"></div>
-    </div>
     
-    <div class="logo">
-        <img id="logo" src='/static/logo.png'>
-    </div>
 
     <script>
         var next_url;

@@ -98,6 +98,6 @@ def load_module(pics, module):
                 pics.append(picpath)
 
 
-#run(host='localhost', port=8080, server="paste")
 load_config()
-run(host='0.0.0.0', port=8080)
+run(host='0.0.0.0', port=8080, server="paste")
+#run(host='0.0.0.0', port=8080)

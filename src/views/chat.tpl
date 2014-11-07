@@ -25,17 +25,6 @@ html, body {
     background-size: contain;
 }
 
-#snapchat{
-    position: fixed;
-    width: 100%;
-    opacity: .5;
-    background-color: black;
-    bottom: 40%;
-    text-align: center;
-    color: white;
-    font-family: Tahoma, Geneva, sans-serif;
-}
-
 #logo {
     position: fixed;
     opacity: .5;
@@ -71,9 +60,7 @@ html, body {
 
 <body>
     <div id="logo"></div>
-    <div id="img">
-        <div id="snapchat"></div>
-    </div>
+    <div id="img"></div>
     
 
     <script>
@@ -125,42 +112,6 @@ html, body {
             });
             setTimeout(newDirective, 1000);
         };
-
-
-        // well crap, no relative paths to websockets
-        var loc = window.location, ws_uri;
-        if (loc.protocol === "https:") {
-                ws_uri = "wss:";
-        } else {
-                ws_uri = "ws:";
-        }
-        ws_uri += "//" + loc.host + "/websocket";
-
-        var ws = new WebSocket(ws_uri);
-        ws.onopen = function() {
-            ws.send("1,checking in");
-        };
-        ws.onmessage = function(evt) {
-            op = evt.data.split(",", 1);
-            op = String(op);
-            msg = evt.data.slice(op.length + 1);
-            console.log(op.length + 1);
-            op = parseInt(op);
-            handle_ws(op, msg);
-        };
-
-        function handle_ws(op, msg) {
-            console.log("received " + op + ", with msg'" + msg + "'");
-            console.log(typeof(op));
-            switch (op) {
-                case 1:
-                    $("#snapchat").text(msg);
-                    break;
-                default:
-                    console.log("whoops, I can't handle that");
-            }
-            
-        }
 
     </script>
 

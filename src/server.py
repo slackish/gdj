@@ -6,7 +6,7 @@ import random
 import sys
 import time
 
-from bottle import route, run, template, static_file
+from bottle import route, run, template, static_file, abort, Bottle, request
 
 PICS = []
 PICLEN = 0
@@ -15,16 +15,17 @@ INTERVAL = 20;
 
 #####################################################################
 #
-# Bottle Handlers
+# Bottle Routing
 #
 #####################################################################
+app = Bottle()
 
-@route('/')
+@app.route('/')
 def main():
     """ returns main page with most JS magic """ 
     return template("main")
 
-@route('/next')
+@app.route('/next')
 def next():
     """ figure out next gif to return """
     index, nexttime = whatsnext()
@@ -32,15 +33,34 @@ def next():
             'nextImg': PICS[index]}
 
 
-@route('/static/<path:path>')
+@app.route('/static/<path:path>')
 def static(path):
     print >>sys.stderr, os.path.join("./static", path)
     return static_file(path, root="./static")
 
 
-@route('/hello/<name>')
-def index(name):
-    return template('<b>Hello {{name}}</b>!', name=name)
+@app.route('/admin')
+def admin():
+    return template("admin_landing")
+
+@app.route('/websocket')
+def ws():
+    """
+    websocket code
+    """
+    print >>sys.stderr, "websocket called"
+    wsock = request.environ.get('wsgi.websocket')
+    if not wsock:
+        abort(400, 'Expected WebSocket request.')
+
+    while True:
+        try:
+            message = wsock.receive()
+            print >>sys.stderr, "got a message!:", message
+            wsock.send("1,Your message was: %r" % message)
+        except WebSocketError:
+            break
+
     
 #####################################################################
 #
@@ -99,5 +119,14 @@ def load_module(pics, module):
 
 
 load_config()
-run(host='0.0.0.0', port=8080, server="paste")
+#run(host='0.0.0.0', port=8080, server="paste")
 #run(host='0.0.0.0', port=8080)
+
+
+
+from gevent.pywsgi import WSGIServer
+from geventwebsocket import WebSocketError
+from geventwebsocket.handler import WebSocketHandler
+server = WSGIServer(("0.0.0.0", 8080), app,
+                    handler_class=WebSocketHandler)
+server.serve_forever()

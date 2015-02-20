@@ -1,6 +1,6 @@
 # GDJ #
 
-Instead of video DJ (VGJ), this is GIF DJ (GDJ).
+Instead of video DJ (VDJ), this is GIF DJ (GDJ).
 
 The idea here is to KISS, but semi-entertaining.
 

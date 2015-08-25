@@ -12,6 +12,7 @@ PICS = []
 PICLEN = 0
 STARTTIME = 0
 INTERVAL = 20; 
+EXTENSIONS = (".gif", ".jpg", ".png")
 
 #####################################################################
 #
@@ -113,7 +114,7 @@ def load_module(pics, module):
     moddir = os.path.join(".", "static", "imgs", module)
     if os.path.isdir(moddir):
         for f in os.listdir(moddir):
-            if f.endswith(".gif") or f.endswith(".jpg"):
+            if reduce(lambda x,y: x or y, map(f.endswith, EXTENSIONS)):
                 picpath = os.path.join(moddir[1:], f)
                 pics.append(picpath)
 

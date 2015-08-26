@@ -12,6 +12,9 @@ Download some gifs, download the software, read the source, and go nuts.
 Seriously, this isn't (and will likely never be) ready for production, so use 
 at your own risk.
 
+    apt-get install libev-dev
+    pip install gevent-websocket
+
 
 # Credits #
 

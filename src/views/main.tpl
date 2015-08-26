@@ -84,7 +84,6 @@ html, body {
         newDirective();
 
         function newDirective() {
-            console.log("new directive called");
             $.ajax({
                 type: 'get',
                 url: '/next',
@@ -138,9 +137,10 @@ html, body {
 
         var ws = new WebSocket(ws_uri);
         ws.onopen = function() {
-            ws.send("1,checking in");
+            ws.send("0,checking in");
         };
         ws.onmessage = function(evt) {
+            console.log(evt.data);
             op = evt.data.split(",", 1);
             op = String(op);
             msg = evt.data.slice(op.length + 1);
@@ -153,6 +153,8 @@ html, body {
             console.log("received " + op + ", with msg'" + msg + "'");
             console.log(typeof(op));
             switch (op) {
+                case 0:
+                    console.log("You shouldn't see op 0 here");
                 case 1:
                     $("#snapchat").text(msg);
                     break;

@@ -12,9 +12,25 @@ Download some gifs, download the software, read the source, and go nuts.
 Seriously, this isn't (and will likely never be) ready for production, so use 
 at your own risk.
 
-    apt-get install libev-dev
-    pip install gevent-websocket
+## Setup
 
+    apt-get install libev-dev
+    pip3 install gevent-websocket 
+    pip3 install bottle
+
+## Configuration
+
+There are two pieces you will want to configure.  First one is the logo, which will always be src/static/logo.png.  Just overwrite it with whatever logo you have.
+
+The second is to run through `src/gdj.cfg`.  The two primary settings are the
+interval (seconds between each picture change) and modules (a commma separated
+list of directories to populate for animated pictures).
+
+## Running
+
+    cd src
+    python3 server.py
+    
 
 # Credits #
 

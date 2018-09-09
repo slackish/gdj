@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 
-import ConfigParser
+import configparser
 import os
 import random
 import sys
@@ -8,6 +8,7 @@ import time
 import traceback
 
 from bottle import route, run, template, static_file, abort, Bottle, request
+from functools import reduce
 
 PICS = []
 PICLEN = 0
@@ -40,7 +41,7 @@ def next():
 
 @app.route('/static/<path:path>')
 def static(path):
-    print >>sys.stderr, os.path.join("./static", path)
+    print(os.path.join("./static", path), file=sys.stderr)
     return static_file(path, root="./static")
 
 
@@ -57,7 +58,7 @@ def ws():
     """
     websocket code
     """
-    print >>sys.stderr, "websocket called"
+    print("websocket called", file=sys.stderr)
     wsock = request.environ.get('wsgi.websocket')
     if not wsock:
         abort(400, 'Expected WebSocket request.')
@@ -95,14 +96,14 @@ def handle_ws(message, ws):
         op = int(message)
         message = ""
     else:
-        print >> sys.stderr,"WTF is '%s'" % str(message)
+        print("WTF is '%s'" % str(message), file=sys.stderr)
 
-    print "op %d, message: %s" % (op, message)
+    print("op %d, message: %s" % (op, message))
 
     if op == 0:
         ws.send("1,%s" % current_message)
     elif op == 1:
-        print >> sys.stderr, clients
+        print(clients, file=sys.stderr)
         current_message = message
         message = "1,%s" % message
         send_to_all_ws(message)
@@ -112,7 +113,7 @@ def send_to_all_ws(message):
     for s in clients[:]:
         try:
             s.send(message)
-            print "sent 1"
+            print("sent 1")
         except WebSocketError:
             traceback.print_exc()
             clients.remove(s)
@@ -141,7 +142,7 @@ def load_config():
     
     global INTERVAL, STARTTIME, PICS, PICLEN
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.read("gdj.cfg")
     modules = config.get('gdj', 'modules')
     modules = [x.strip() for x in modules.split(",")]
@@ -165,7 +166,8 @@ def load_module(pics, module):
     moddir = os.path.join(".", "static", "imgs", module)
     if os.path.isdir(moddir):
         for f in os.listdir(moddir):
-            if reduce(lambda x,y: x or y, map(f.endswith, EXTENSIONS)):
+            if reduce(lambda x,y: x or y, list(map(f.endswith, EXTENSIONS))):
+                f = f.replace(" ", "%20")
                 picpath = os.path.join(moddir[1:], f)
                 pics.append(picpath)
 
